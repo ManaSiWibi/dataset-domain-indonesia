@@ -1,5 +1,9 @@
 Pembaharuan terakhir: 17/11/23
 
+
+# Kumpulan Dataset Domain Indonesia
+Repository ini merupakan kumpulan domain-domain dengan TLD maupun ccTLD di Indonesia.
+
 # ipsniper
 | No | Domain | Jumlah |
 |----|-------------|-------------------|
