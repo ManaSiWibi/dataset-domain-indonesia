@@ -2,7 +2,18 @@ Pembaharuan terakhir: 17/11/23
 
 
 # Kumpulan Dataset Domain Indonesia
-Repository ini merupakan kumpulan domain-domain dengan TLD maupun ccTLD di Indonesia.
+Repository ini merupakan kumpulan domain atau situs website dengan TLD maupun ccTLD di Indonesia.
+
+# Tranco: A Research-Oriented Top Sites Ranking Hardened Against Manipulation
+Metodologi: https://tranco-list.eu/methodology
+lines: 26166
+
+```
+$ curl -O -J -L https://tranco-list.eu/download/Z257G/full 
+$ cut -d, -f1 --complement tranco_Z257G.csv > domain.txt
+$ grep -E "\.id[[:space:]]$" domain.txt > domains.txt
+
+```
 
 # ipsniper
 | No | Domain | Jumlah |
