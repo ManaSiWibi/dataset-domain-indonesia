@@ -5,9 +5,8 @@ Pembaharuan terakhir: 17/11/23
 Repository ini merupakan kumpulan domain atau situs website dengan TLD maupun ccTLD di Indonesia.
 
 # Tranco: A Research-Oriented Top Sites Ranking Hardened Against Manipulation
-Metodologi: https://tranco-list.eu/methodology
+Metodologi: https://tranco-list.eu/methodology  
 lines: 26166
-
 ```
 $ curl -O -J -L https://tranco-list.eu/download/Z257G/full 
 $ cut -d, -f1 --complement tranco_Z257G.csv > domain.txt
@@ -44,12 +43,13 @@ rumput.or.id
 ```
 
 # Domains Project
-filename: `domain2multi-id00.txt.xz`
+Metodologi: https://github.com/tb0hdan/domains#crawlers  
+lines: 2544669
 
 
 | No | Domain | Jumlah |
 |----|-------------|-------------------|
-| 1  | .co.id      | 640060            |
+| 1  | .co.id      | 640060(?)            |
 | 2  | .id         | 633676            |
 | 3  | .sch.id     | 261613            |
 | 4  | .my.id      | 255246            |
