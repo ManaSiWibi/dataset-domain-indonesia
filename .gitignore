@@ -1,0 +1,8 @@
+# Large source files - use filtered versions only
+*.xz
+*.gz
+*.tar
+*.zip
+
+# Mac
+.DS_Store
