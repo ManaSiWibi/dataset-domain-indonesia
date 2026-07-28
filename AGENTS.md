@@ -4,14 +4,17 @@ Dataset repository — no code, no build/test/lint. The "tasks" here are refresh
 
 ## Layout
 
-Four dataset directories, each with its own provenance:
+Four dataset directories, each with its own provenance, plus a generator script and two union outputs at the repo root:
 
-| Directory | Source | Per-TLD files | Combined file |
+| Path | Source | Per-TLD files | Combined file |
 |---|---|---|---|
 | `Tranco/` | https://tranco-list.eu (List ID 46ZYX) | `top-1m/domain.txt` (filtered to .id) | `domains.txt` (17,752 lines) |
 | `ipsniper/` | https://ipsniper.info | One `<tld>.txt` per ccTLD (e.g. `co.id.txt`) | — |
 | `Domains Project/` | https://domainsproject.org | — | `domain2multi-id00.txt` (2,544,669 lines) |
 | `commoncrawl/` | https://commoncrawl.org Host Index v2 (HF mirror) | — | `domain2multi-id.txt` (420,735 lines) |
+| `combine.py` (root) | generator | — | — |
+| `latest.txt` (root) | `combine.py` output | — | union, sorted, ~3.05M lines (~64 MB) |
+| `latest.csv` (root) | `combine.py` output | — | `domain,source_count,sources` — gitignored (regenerate locally) |
 
 `ipsniper/<tld>.txt` and `Tranco/domains.txt`/`top-1m/domain.txt` differ in format:
 - Tranco = bare domain, one per line.
@@ -20,6 +23,8 @@ Four dataset directories, each with its own provenance:
 - Common Crawl = bare registered domain, one per line.
 
 `Tranco/top-1m/domain.txt` is a smaller filtered subset vs the full `Tranco/domains.txt` — both come from the same Tranco download but filtered with different criteria. Keep both unless the maintainer says otherwise.
+
+`combine.py` normalizes (lowercase, strip `www.`, strip trailing dot) and dedupes across all five source files (Tranco full + Tranco top-1M + ipsniper dir + Domains Project + Common Crawl) to produce `latest.txt` (sorted union) and `latest.csv` (with per-domain source trace).
 
 ## Refresh workflow
 

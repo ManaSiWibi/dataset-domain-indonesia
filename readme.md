@@ -129,6 +129,51 @@ staiypiqbaubau.ac.id
 sdnpemotohbarat.sch.id
 ```
 
+# Gabungan (latest.txt)
+Gabungan semua dataset di atas, dinormalisasi (huruf kecil, tanpa `www.`, tanpa titik akhir) dan dideduplikasi. Setiap domain dicatat bersama jumlah sumber yang memuatnya.
+
+| Sumber             | Domain unik |
+|--------------------|-------------:|
+| Tranco (full)      |      17,752 |
+| Tranco (top-1M)    |       4,754 |
+| ipsniper           |     885,939 |
+| Domains Project    |   2,073,727 |
+| Common Crawl       |     420,733 |
+| **Union**          | **3,046,964** |
+
+
+Sebaran jumlah sumber per domain:
+
+| Sumber | Domain |
+|--------|-------:|
+| hanya 1 sumber | 2,791,371 |
+| 2 sumber       |   167,212 |
+| 3 sumber       |    79,365 |
+| 4 sumber       |     6,065 |
+| 5 sumber       |     2,951 |
+
+
+Domain dengan jumlah subdomain `.id` terbanyak (di seluruh union, dikelompokkan per *registered domain*):
+
+| No | Registered domain | Jumlah |
+|----|-------------|-------------------|
+| 1  | blogspot.co.id    | 120451            |
+| 2  | cbn.net.id        | 82892             |
+| 3  | indonetwork.co.id | 17275             |
+| 4  | ipb.ac.id         | 13758             |
+| 5  | three.co.id       | 12230             |
+| 6  | fast.net.id       | 10800             |
+| 7  | gunadarma.ac.id   | 8336              |
+| 8  | ugm.ac.id         | 8077              |
+| 9  | solnet.net.id     | 7943              |
+| 10 | interlink.net.id  | 7516              |
+
+
+File:
+- `latest.txt` — union terurut ascending, satu domain per baris (~3.05 M baris).
+- `combine.py` — skrip generator (Python 3, tanpa dependensi eksternal). Skrip ini juga bisa menulis `latest.csv` (jejak sumber) bila dihapus dari `.gitignore`.
+
+
 # Sumber
 https://domainsproject.org/
 
@@ -194,6 +239,13 @@ con.execute(f"""
 EOF
 ```
 Ganti `CC-MAIN-2025-18` dengan ID crawl terbaru dari https://commoncrawl.org/the-data/.
+
+## Gabungan (latest.txt / latest.csv)
+Setelah keempat dataset di atas diperbarui, jalankan `combine.py` untuk menghasilkan union yang dinormalisasi dan dideduplikasi.
+```
+$ python3 combine.py
+```
+Skrip membaca semua sumber, menulis `latest.txt` (union terurut) dan `latest.csv` (dengan jejak sumber), lalu mencetak ringkasan jumlah dan per-TLD ke stderr. Tidak butuh dependensi eksternal (hanya Python 3 standar).
 
 ## Pembaharuan
 Pembaharuan mengikuti siklus rilis sumber:
