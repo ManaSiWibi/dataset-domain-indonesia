@@ -94,10 +94,47 @@ www.langitpayment.web.id
 cpanel.globaltrade.co.id
 ```
 
+# Common Crawl
+Metodologi: https://github.com/commoncrawl/cc-host-index  
+Crawl: CC-MAIN-2025-18 (April 2025)  
+lines: 420735
+
+Daftar *registered domain* unik ber-TLD `.id` yang berhasil dijangkau oleh crawler Common Crawl pada crawl tersebut. Domain diambil dari dataset publik **Host Index** (https://huggingface.co/datasets/commoncrawl/host-index-testing-v2) dengan memfilter `url_host_tld = 'id'`.
+
+
+| No | Domain | Jumlah |
+|----|-------------|-------------------|
+| 1  | .id (pure)  | 210193            |
+| 2  | .co.id      | 64543             |
+| 3  | .my.id      | 57753             |
+| 4  | .sch.id     | 25623             |
+| 5  | .web.id     | 20675             |
+| 6  | .desa.id    | 9151              |
+| 7  | .or.id      | 8981              |
+| 8  | .biz.id     | 8729              |
+| 9  | .ac.id      | 8309              |
+| 10 | .go.id      | 4699              |
+| 11 | .net.id     | 1292              |
+| 12 | .ponpes.id  | 557               |
+| 13 | .mil.id     | 230               |
+|   Total |        | 420735            |
+
+
+### Sampel
+```
+stikes-muhammadiyahku.ac.id
+tokoklungkung.biz.id
+karyamandirikontraktor.id
+staiypiqbaubau.ac.id
+sdnpemotohbarat.sch.id
+```
+
 # Sumber
 https://domainsproject.org/
 
 https://ipsniper.info/
+
+https://commoncrawl.org/
 
 # Cara mendapatkan data
 Bagian ini menjelaskan langkah-langkah untuk mendapatkan atau memperbarui setiap dataset pada repositori ini.
@@ -136,8 +173,31 @@ $ xz -dk "Domains Project/domain2multi-id00.txt.xz"
 ```
 Untuk daftar lengkap TLD atau data negara lain: https://github.com/tb0hdan/domains (mirror `git lfs` + `./unpack.sh`). Versi raw di `https://dataset.domainsproject.org/` butuh autentikasi.
 
+## Common Crawl
+Data berasal dari dataset Host Index v2 (Parquet) di HuggingFace. Query dijalankan dengan DuckDB yang membaca Parquet lewat HTTP range — tidak perlu mengunduh seluruh dataset (~9 GB per crawl).
+```
+$ pip install duckdb
+$ python3 - <<'EOF'
+import duckdb
+con = duckdb.connect()
+con.execute("INSTALL httpfs; LOAD httpfs;")
+base = "https://huggingface.co/datasets/commoncrawl/host-index-testing-v2/resolve/main/data/crawl=CC-MAIN-2025-18"
+files = [f"{base}/CC-MAIN-2025-18.part-{i:05d}.parquet" for i in range(30)]
+con.execute(f"""
+  COPY (
+    SELECT DISTINCT url_host_registered_domain
+    FROM read_parquet({files!r})
+    WHERE url_host_tld = 'id'
+    ORDER BY url_host_registered_domain
+  ) TO 'commoncrawl/domain2multi-id.txt' (HEADER FALSE)
+""")
+EOF
+```
+Ganti `CC-MAIN-2025-18` dengan ID crawl terbaru dari https://commoncrawl.org/the-data/.
+
 ## Pembaharuan
 Pembaharuan mengikuti siklus rilis sumber:
 - **Tranco** — harian (https://tranco-list.eu/latest_list)
 - **ipsniper** — bulanan, biasanya awal bulan (https://ipsniper.info/)
 - **Domains Project** — tidak terjadwal, beberapa bulan sekali
+- **Common Crawl** — bulanan (https://commoncrawl.org/the-data/)

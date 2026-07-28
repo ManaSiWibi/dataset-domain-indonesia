@@ -4,20 +4,22 @@ Dataset repository — no code, no build/test/lint. The "tasks" here are refresh
 
 ## Layout
 
-Three dataset directories, each with its own provenance:
+Four dataset directories, each with its own provenance:
 
 | Directory | Source | Per-TLD files | Combined file |
 |---|---|---|---|
-| `Tranco/` | https://tranco-list.eu (List ID 43KLX) | `top-1m/domain.txt` (filtered to .id) | `domains.txt` (11,220 lines) |
+| `Tranco/` | https://tranco-list.eu (List ID 46ZYX) | `top-1m/domain.txt` (filtered to .id) | `domains.txt` (17,752 lines) |
 | `ipsniper/` | https://ipsniper.info | One `<tld>.txt` per ccTLD (e.g. `co.id.txt`) | — |
 | `Domains Project/` | https://domainsproject.org | — | `domain2multi-id00.txt` (2,544,669 lines) |
+| `commoncrawl/` | https://commoncrawl.org Host Index v2 (HF mirror) | — | `domain2multi-id.txt` (420,735 lines) |
 
 `ipsniper/<tld>.txt` and `Tranco/domains.txt`/`top-1m/domain.txt` differ in format:
 - Tranco = bare domain, one per line.
 - ipsniper = zone-file lines: `domain\tIN\t<record>\t<value>` (mixed A/AAAA/NS/CNAME, one record per line).
 - Domains Project = bare domain, one per line.
+- Common Crawl = bare registered domain, one per line.
 
-`Tranco/top-1m/domain.txt` is a smaller filtered subset (4,030 lines) vs the full `Tranco/domains.txt` (11,220) — both come from the same Tranco download but filtered with different criteria. Keep both unless the maintainer says otherwise.
+`Tranco/top-1m/domain.txt` is a smaller filtered subset vs the full `Tranco/domains.txt` — both come from the same Tranco download but filtered with different criteria. Keep both unless the maintainer says otherwise.
 
 ## Refresh workflow
 
@@ -30,11 +32,13 @@ Then split into `top-1m/domain.txt` if a top-1M variant is desired. Update the L
 
 **ipsniper / Domains Project** — re-download from source, then re-split by ccTLD suffix (`.id`, `.co.id`, `.ac.id`, `.go.id`, `.my.id`, `.sch.id`, `.net.id`, `.web.id`, `.or.id`, `.biz.id`, `.desa.id`, `.mil.id`, `.ponpes.id`, plus `.kop.id` and `.xn--9tfky.id` for ipsniper). Update counts table in `readme.md`.
 
+**Common Crawl** — query the Host Index v2 Parquet via DuckDB HTTP range reads. Requires `pip install duckdb pandas`. The script in `readme.md` filters `url_host_tld = 'id'` and emits a sorted bare-domain list. Update the crawl ID (e.g. `CC-MAIN-2025-18`) and the per-TLD counts table.
+
 `.gitignore` excludes `.xz`/`.gz`/`.tar`/`.zip` and raw Tranco CSVs (`Tranco/tranco_*.csv`) — only keep filtered outputs in git.
 
 ## Counts
 
-Per-TLD counts in `readme.md` (Tranco table ~line 17, ipsniper ~line 36, Domains Project ~line 70) must match the line counts of the committed files. If they drift, regenerate with `wc -l`.
+Per-TLD counts in `readme.md` (Tranco table ~line 17, ipsniper ~line 36, Domains Project ~line 70, Common Crawl ~line 105) must match the line counts of the committed files. If they drift, regenerate with `wc -l`.
 
 ## Conventions
 
