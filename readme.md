@@ -98,3 +98,46 @@ cpanel.globaltrade.co.id
 https://domainsproject.org/
 
 https://ipsniper.info/
+
+# Cara mendapatkan data
+Bagian ini menjelaskan langkah-langkah untuk mendapatkan atau memperbarui setiap dataset pada repositori ini.
+
+## Tranco
+Unduh list harian dari https://tranco-list.eu/latest_list, ambil kolom domain, lalu saring yang berakhiran `.id`. List ID berubah setiap hari — ganti `46ZYX` dengan ID terbaru.
+```
+$ curl -O -J -L https://tranco-list.eu/download/46ZYX/full
+$ tr -d '\r' < tranco_46ZYX_full.csv | awk -F',' '{print $2}' | grep '\.id$' > Tranco/domains.txt
+```
+Untuk subset top-1M (domain dengan peringkat ≤ 1.000.000):
+```
+$ tr -d '\r' < tranco_46ZYX_full.csv | awk -F',' '$1<=1000000 && $2 ~ /\.id$/' | awk -F',' '{print $2}' | sort -u > Tranco/top-1m/domain.txt
+```
+
+## ipsniper
+Unduh zonefile per TLD dari arsip publik ipsniper, lalu dekompresi.
+```
+$ mkdir -p ipsniper
+$ for tld in ac biz co desa go kop mil my net or ponpes sch web xn--9tfky; do
+>   curl -sL -o "ipsniper/$tld.id.txt.gz" \
+>     "https://ipsniper.info/archive/latest/zonefiles/public/$tld.id.txt.gz"
+> done
+$ curl -sL -o ipsniper/id.txt.gz \
+>   "https://ipsniper.info/archive/latest/zonefiles/public/id.txt.gz"
+$ for f in ipsniper/*.gz; do gunzip -k "$f"; done
+```
+File `ipsniper/<tld>.id.txt` berformat zonefile: `domain\tIN\t<record>\t<value>` (A/AAAA/NS/CNAME).
+
+## Domains Project
+Sumber tidak menyediakan unduhan langsung per TLD; data .id tersedia sebagai satu shard `.xz` di mirror GitHub.
+```
+$ curl -sL -o "Domains Project/domain2multi-id00.txt.xz" \
+>   "https://media.githubusercontent.com/media/tb0hdan/domains/master/data/indonesia/domain2multi-id00.txt.xz"
+$ xz -dk "Domains Project/domain2multi-id00.txt.xz"
+```
+Untuk daftar lengkap TLD atau data negara lain: https://github.com/tb0hdan/domains (mirror `git lfs` + `./unpack.sh`). Versi raw di `https://dataset.domainsproject.org/` butuh autentikasi.
+
+## Pembaharuan
+Pembaharuan mengikuti siklus rilis sumber:
+- **Tranco** — harian (https://tranco-list.eu/latest_list)
+- **ipsniper** — bulanan, biasanya awal bulan (https://ipsniper.info/)
+- **Domains Project** — tidak terjadwal, beberapa bulan sekali
