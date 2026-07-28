@@ -153,6 +153,25 @@ Sebaran jumlah sumber per domain:
 | 5 sumber       |     2,951 |
 
 
+| No | Domain | Jumlah |
+|----|-------------|-------------------|
+| 1  | .id (pure)  | 849654            |
+| 2  | .co.id      | 612062            |
+| 3  | .my.id      | 475917            |
+| 4  | .sch.id     | 222892            |
+| 5  | .web.id     | 197569            |
+| 6  | .ac.id      | 181222            |
+| 7  | .net.id     | 162865            |
+| 8  | .go.id      | 132108            |
+| 9  | .biz.id     | 109829            |
+| 10 | .or.id      | 61134             |
+| 11 | .desa.id    | 37038             |
+| 12 | .ponpes.id  | 3586              |
+| 13 | .mil.id     | 1083              |
+| 14 | .kop.id     | 5                 |
+|   Total |        | 3046964           |
+
+
 Domain dengan jumlah subdomain `.id` terbanyak (di seluruh union, dikelompokkan per *registered domain*):
 
 | No | Registered domain | Jumlah |
