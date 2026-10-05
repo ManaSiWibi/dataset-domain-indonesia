@@ -5,4 +5,10 @@
 *.zip
 
 # Mac
-.DS_Storelatest.csv
+.DS_Store
+
+# Python
+__pycache__/
+
+# combine.py local output (regenerate: python3 combine.py)
+latest.csv
