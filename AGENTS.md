@@ -8,18 +8,18 @@ Four dataset directories, each with its own provenance, plus two scripts and the
 
 | Path | Source | Per-TLD files | Combined file |
 |---|---|---|---|
-| `Tranco/` | https://tranco-list.eu (List ID 46ZYX) | `top-1m/domain.txt` (filtered to .id) | `domains.txt` (17,752 lines) |
+| `Tranco/` | https://tranco-list.eu (List ID GQ3LK) | `top-1m/domain.txt` (filtered to .id) | `domains.txt` (18,701 lines) |
 | `ipsniper/` | https://ipsniper.info | One zone file per TLD (`co.id.txt`, `id.txt`, …) | — |
 | `Domains Project/` | https://domainsproject.org | — | `domain2multi-id00.txt` (2,544,669 lines) |
 | `commoncrawl/` | https://commoncrawl.org Host Index v2 (HF mirror) | — | `domain2multi-id.txt` (420,735 lines) |
 | `combine.py` (root) | generator | — | writes `latest.txt` + `latest.csv` |
 | `audit.py` (root) | verifier | — | prints every readme table, validates `latest.txt` |
-| `latest.txt` (root) | `combine.py` output | — | union, 3,046,957 lines, sorted by `(-source_count, domain)` |
+| `latest.txt` (root) | `combine.py` output | — | union, 3,092,201 lines, sorted by `(-source_count, domain)` |
 | `latest.csv` (root) | `combine.py` output | — | `domain,source_count,sources` — gitignored, regenerate locally |
 
 File formats differ — lines are not always domains:
 - Tranco = bare domain, one per line (no duplicates).
-- ipsniper = zone-file lines: `domain\tIN\t<record>\t<value>` (A/AAAA/NS/MX/CNAME, one record per line) — 4.1M lines but only 885,939 distinct domains.
+- ipsniper = zone-file lines: `domain\tIN\t<record>\t<value>` (A/AAAA/NS/MX/CNAME, one record per line) — 4.3M lines but only 928,926 distinct domains.
 - Domains Project = bare domain, one per line, with duplicates (2,544,669 lines → 2,073,720 unique).
 - Common Crawl = bare registered domain, one per line; 1 line is not a domain and is dropped by normalization.
 
